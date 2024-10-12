@@ -3,11 +3,12 @@ using AppServices;
 using AppServices.DTOs;
 using AppServices.DTOs.Transaction;
 using AppServices.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers;
 
-[Route("api/transaction")]
+[Route("api/transactions")]
 [ApiController]
 public class TransactionController : ControllerBase
 {
@@ -19,8 +20,11 @@ public class TransactionController : ControllerBase
     }
     
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetTransactions([FromQuery] QueryObject query)
     {
+        
+        
         var response = await _transactionService.QueryTransactions(query);
 
         if (response.IsError)

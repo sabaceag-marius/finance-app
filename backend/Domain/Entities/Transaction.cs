@@ -21,6 +21,11 @@ public class Transaction
     public DateOnly Date { get; set; }
 
     //TODO add User and Category + Ids
+
+    [ForeignKey("User")] 
+    public string UserId { get; set; } = "";
+    
+    public User? User { get; set; }
     
     [ForeignKey("Category")]
     public int CategoryId { get; set; }
