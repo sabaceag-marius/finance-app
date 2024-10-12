@@ -124,23 +124,10 @@ public class UserService : IUserService
         return tokenHandler.WriteToken(token);
     }
     
-    private async Task<Response<User>> GetUserByNameAsync(string username)
+    public async Task<User?> GetUserByNameAsync(string username)
     {
         var user = await _userManager.FindByNameAsync(username);
-        
-        if (user == null)
-        {
-            return new Response<User>
-            {
-                IsError = true,
-                ErrorStatusCode = ErrorStatusCodes.NotFound,
-                ErrorMessage = "User not found!"
-            };
-        }
-        
-        return new Response<User>
-        {
-            Value = user
-        };
+
+        return user;
     }
 }

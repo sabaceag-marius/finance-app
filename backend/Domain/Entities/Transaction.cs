@@ -19,15 +19,12 @@ public class Transaction
     [Column(TypeName = "decimal(18,2)")]
     public decimal Value {get;set;}
     public DateOnly Date { get; set; }
-
-    //TODO add User and Category + Ids
-
-    [ForeignKey("User")] 
-    public string UserId { get; set; } = "";
     
-    public User? User { get; set; }
+    [ForeignKey("User")] 
+    public string UserId { get; set; }
     
     [ForeignKey("Category")]
     public int CategoryId { get; set; }
+    public User? User { get; set; }
     public Category? Category { get; set; }
 }

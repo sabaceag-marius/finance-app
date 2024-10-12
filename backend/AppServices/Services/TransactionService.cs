@@ -20,11 +20,11 @@ public class TransactionService : ITransactionService
         _categoryService = categoryService;
     }
     
-    public async Task<Response<TransactionDto>> GetTransaction(int id)
+    public async Task<Response<TransactionDto>> GetTransaction(int id, User user)
     {
         var transaction = await _transactionRepository.GetByIdAsync(id);
 
-        if (transaction == null)
+        if (transaction == null || transaction.UserId != user.Id)
         {
             return new Response<TransactionDto>
             {
@@ -50,7 +50,7 @@ public class TransactionService : ITransactionService
         };
     }
     
-    public async Task<Response<TransactionDto>> AddTransaction(CreateTransactionRequestDto requestDto)
+    public async Task<Response<TransactionDto>> AddTransaction(CreateTransactionRequestDto requestDto, User user)
     {
         // Transform requestDto in a transaction
         var transaction = requestDto.ToTransaction();
@@ -61,7 +61,9 @@ public class TransactionService : ITransactionService
         var category = await _categoryService.GetCategoryByNameAsync(categoryName);
         
         transaction.CategoryId = category.Id;
-
+        transaction.UserId = user.Id;
+        //transaction.User = user;
+        
         // Add the transaction in the repo
         
         //TODO Add try for the database exceptions?
@@ -77,13 +79,14 @@ public class TransactionService : ITransactionService
         };
     }
     
-    public async Task<Response<TransactionDto>> UpdateTransaction(int id, UpdateTransactionRequestDto requestDto)
+    public async Task<Response<TransactionDto>> UpdateTransaction(int id, UpdateTransactionRequestDto requestDto,
+        User user)
     {
         // Check if there's a transaction with this id
         
         var oldTransaction = await _transactionRepository.GetByIdAsyncNoTracking(id);
 
-        if (oldTransaction == null)
+        if (oldTransaction == null || oldTransaction.UserId != user.Id)
         {
             return new Response<TransactionDto>
             {
@@ -93,18 +96,9 @@ public class TransactionService : ITransactionService
             };
         }
         
-        //|| oldTransaction.UserId != user.Id)
-        // {
-        //     return new CommandResponse<TransactionDto?>
-        //     {
-        //         IsError = true,
-        //         ErrorStatusCode = ErrorStatusCodes.Unauthorized,
-        //         ErrorMessage = "Unauthorized"
-        //     };
-        // }
-        
         var transaction = requestDto.ToTransaction();
         transaction.Id = id;
+        transaction.UserId = user.Id;
         
         //Get the category of the old transaction
         var oldCategory = oldTransaction.Category;
@@ -134,11 +128,11 @@ public class TransactionService : ITransactionService
         };
     }
 
-    public async Task<Response> DeleteTransaction(int id)
+    public async Task<Response> DeleteTransaction(int id, User user)
     {
         var transaction = await _transactionRepository.GetByIdAsync(id);
 
-        if (transaction == null)
+        if (transaction == null || transaction.UserId != user.Id)
         {
             return new Response
             {
@@ -147,7 +141,7 @@ public class TransactionService : ITransactionService
                 ErrorMessage = "Transaction not found"
             };
         }
-
+        
         await _transactionRepository.DeleteAsync(id);
 
         return new Response();
@@ -155,13 +149,13 @@ public class TransactionService : ITransactionService
 
     
 
-    public async Task<Response<IEnumerable<TransactionDto>>> QueryTransactions(QueryObject query)
+    public async Task<Response<IEnumerable<TransactionDto>>> QueryTransactions(QueryObject query, User user)
     {
         var specification = query.ToSpecification();
 
         var transactions =
             await _transactionRepository.GetPaginatedDataWithSpecificationAsync(specification, query.PageNumber,
-                query.PageSize);
+                query.PageSize, user);
 
         return new Response<IEnumerable<TransactionDto>>
         {

@@ -67,12 +67,13 @@ namespace Infrastructure.Repositories
         }
 
         public async Task<IEnumerable<Transaction>> GetPaginatedDataWithSpecificationAsync(
-            Specification<Transaction> specification, int pageNumber, int pageSize)
+            Specification<Transaction> specification, int pageNumber, int pageSize, User user)
         {
             var skipNumber = (pageNumber - 1) * pageSize;
             
             return await _dbContext.Transactions
                 .Include(transaction => transaction.Category)
+                .Where(transaction => transaction.UserId == user.Id)
                 .Where(specification.Expr) // filtering
                 .Skip(skipNumber).Take(pageSize) // pagination
                 .ToListAsync();
