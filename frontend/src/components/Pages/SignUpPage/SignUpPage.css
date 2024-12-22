@@ -1,0 +1,76 @@
+
+.align-center--wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.login--card > h1{
+    font-weight: 600;
+    margin: 0;
+}
+
+.error{
+    color: #d11124;
+    
+}
+
+.signup--card{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 1.25rem;
+    background-color: #f8f8ff;
+    width: min(400px,70%);
+    padding: 1rem 0;
+}
+
+.signup--card > p {
+    margin: .5rem 0;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    margin: 1rem 0;
+}
+
+
+
+/* form label{
+
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+form input{
+	
+	background: #f7f7f7;
+	padding: .75rem 2rem;
+	border: 1px solid #ccc;
+	outline: none;
+	border-radius: 5px;
+    font-family: Poppins;
+    font-size: 1.1rem;
+} */
+/* .submit-button{
+	align-self: center;
+    padding: 1rem 4rem;
+	color: #fff;
+	background: #573b8a;
+	font-size: 1.25rem;
+	font-weight: bold;
+	outline: none;
+	border: none;
+	border-radius: 2rem;
+	transition: .2s ease-in;
+	cursor: pointer;
+/* } 
+.submit-button:hover{
+	background: #6d44b8;
+} */

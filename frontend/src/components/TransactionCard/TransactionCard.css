@@ -1,0 +1,30 @@
+.transaction-card{
+
+    /* background-color: #ebebeb; */
+    /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); */
+    /* border-radius: 1.25rem; */
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    /* width: 18rem; */
+    padding: .5rem 1rem;
+}
+
+.transaction-card > * {
+    margin: 0;
+}
+
+.transaction-card  h3{
+    font-weight: 500;
+}
+
+.transaction-card:hover{
+    background-color: var(--foreground);
+    cursor: pointer;
+}
+
+.transaction-card-top{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

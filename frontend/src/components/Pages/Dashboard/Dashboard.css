@@ -1,0 +1,111 @@
+
+.search-bar{
+
+    display: inline-flex;
+    background-color: var(--foreground);
+    border: 1px solid var(--border);
+    align-items: center;
+    justify-self: flex-end; 
+    border-radius: .5rem;
+}
+
+.search-bar input,
+.search-bar input:focus{
+    border: none;
+    outline: none;
+    padding: .5rem 2rem;
+	font-size: 1.1rem;
+
+    background-color: transparent;
+}
+
+.search-bar button,
+.search-bar button:focus{
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+
+.top-section{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.top-section-inputs{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6rem;
+}
+
+.top-section-inputs > button{
+    padding: .75rem 2rem;
+	color: var(--secondary-content);
+	background: var(--primary);
+	font-size: 1.25rem;
+	font-weight: bold;
+	outline: none;
+	border: none;
+	border-radius: 1rem;
+	transition: .2s ease-in;
+	cursor: pointer;
+}
+.top-section-inputs > button:hover{
+	background: var(--primary-light);
+}
+
+.dashboard{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.dashboard main{
+    display: flex;
+    flex: 1;
+}
+
+.filter-section{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 25%; /* 25% of the screen */
+    /*background-color: lightblue; /* Optional for visibility */
+}
+
+.transactions-section{
+    flex: 1; /*Takes the remaining space */
+    /* background-color: lightcoral; Optional for visibility */
+}
+
+.transactions-container{
+    display: flex;
+    flex-direction: column;
+}
+
+/* .grid-section {
+    display: grid;
+    gap: .5rem .5rem;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    justify-content: center;
+}
+
+@media screen and (max-width: 1000px) {
+    .grid-section {
+        display: grid;
+        gap: .5rem .5rem;
+        grid-template-columns: repeat(2, 1fr);
+    } 
+}
+
+@media screen and (max-width: 750px) {
+    .grid-section {
+        display: grid;
+        gap: .5rem .5rem;
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+ */

@@ -1,0 +1,63 @@
+.filter-form{
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    margin: 1rem 0;
+    align-items: center;
+}
+
+.filter-label{
+    
+    font-size: .8rem;
+    font-weight: 500;
+}
+
+.filter-input{
+	
+    /* align-self: center; */
+	background: #f7f7f7;
+	padding: .25rem 1.5rem;
+	border: 1px solid #ccc;
+	outline: none;
+	border-radius: 5px;
+    font-family: Poppins;
+}
+
+.filter-form .submit-button{
+	align-self: center;
+    padding: .75rem 2rem;
+	color: var(--secondary-content);
+	background: var(--primary);
+	font-size: 1rem;
+	font-weight: bold;
+	outline: none;
+	border: none;
+	border-radius: 1rem;
+	transition: .2s ease-in;
+	cursor: pointer;
+}
+.filter-form .submit-button:hover{
+	background: var(--primary-light);
+}
+
+.filter-form .reset-button{
+	align-self: center;
+    padding: .75rem 2rem;
+	color: var(--secondary-content);
+	background: var(--secondary);
+	font-size: 1rem;
+	font-weight: bold;
+	outline: none;
+	border: none;
+	border-radius: 1rem;
+	transition: .2s ease-in;
+	cursor: pointer;
+}
+.filter-form .reset-button:hover{
+	background: var(--secondary-light);
+}
+
+.buttons-section{
+    display: flex;
+    gap: 1rem
+}

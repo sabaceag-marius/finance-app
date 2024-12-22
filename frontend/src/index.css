@@ -1,0 +1,90 @@
+:root{
+  --primary: #36b8c9;
+  --primary-light: #5ec6d4 ;
+  --primary-dark: #2b93a1 ;
+  --primary-content: #222222;
+
+  --secondary: #c94736;
+  --secondary-light: #d46c5e;
+  --secondary-dark: #a1392b;
+  --secondary-content: #ffffff;
+
+  --background: #eff1f1;
+  --foreground: #fbfbfb ;
+  --border: #dde1e2 ;
+
+  --success: #36c936 ;
+  --error: #c93636 ;
+}
+
+body {
+  margin: 0;
+  font-family: Poppins, sans-serif;
+  color: var(--primary-content);
+  background-color: var(--background);
+  /* height: 100%; */
+}
+
+/*hide arrows on number inputs*/
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+#root{ height: 100%;   width: 100%; margin: 0; padding: 0; }
+input{
+  font-family: Poppins, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+a,
+a:visited,
+a:active,
+a:hover,
+a:focus{
+  color: var(--primary-content)
+}
+
+.ReactModal__Body--open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
+h3{
+  font-weight: 500;
+}
+
+.password-input-container{
+  background: #f7f7f7;
+	padding: .75rem 2rem;
+	border: 1px solid #ccc;
+	outline: none;
+	border-radius: 5px;
+  font-family: Poppins;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+}
+
+.password-input{
+  font-family: Poppins;
+  font-size: 1.1rem;
+  outline: none;
+  border: none;
+  background: transparent;
+}
+
+.password-input-container span{
+  cursor:pointer;
+}
