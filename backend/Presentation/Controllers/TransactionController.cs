@@ -26,6 +26,18 @@ public class TransactionController : ControllerBase
     [Authorize]
     public async Task<IActionResult> GetTransactions([FromQuery] QueryObject query)
     {
+        if (!ModelState.IsValid)
+        {
+            var errorMessage = ModelState.Values
+                .SelectMany(x => x.Errors)
+                .First()
+                .ErrorMessage;
+            return new ObjectResult(new {errorMessage = errorMessage})
+            {
+                StatusCode = ErrorStatusCodes.BadRequest.ToStatusCode(),
+            };
+        }
+        
         var username = User.FindFirstValue(ClaimTypes.GivenName);
 
         var user = await _userService.GetUserByNameAsync(username);
@@ -56,6 +68,18 @@ public class TransactionController : ControllerBase
     [Authorize]
     public async Task<IActionResult> GetTransaction(int id)
     {
+        if (!ModelState.IsValid)
+        {
+            var errorMessage = ModelState.Values
+                .SelectMany(x => x.Errors)
+                .First()
+                .ErrorMessage;
+            return new ObjectResult(new {errorMessage = errorMessage})
+            {
+                StatusCode = ErrorStatusCodes.BadRequest.ToStatusCode(),
+            };
+        }
+        
         var username = User.FindFirstValue(ClaimTypes.GivenName);
 
         var user = await _userService.GetUserByNameAsync(username);
@@ -86,6 +110,18 @@ public class TransactionController : ControllerBase
     [Authorize]
     public async Task<IActionResult> CreateTransaction([FromBody] CreateTransactionRequestDto requestDto)
     {
+        if (!ModelState.IsValid)
+        {
+            var errorMessage = ModelState.Values
+                .SelectMany(x => x.Errors)
+                .First()
+                .ErrorMessage;
+            return new ObjectResult(new {errorMessage = errorMessage})
+            {
+                StatusCode = ErrorStatusCodes.BadRequest.ToStatusCode(),
+            };
+        }
+        
         var username = User.FindFirstValue(ClaimTypes.GivenName);
 
         var user = await _userService.GetUserByNameAsync(username);
@@ -109,6 +145,18 @@ public class TransactionController : ControllerBase
     [Authorize]
     public async Task<IActionResult> DeleteTransaction(int id)
     {
+        if (!ModelState.IsValid)
+        {
+            var errorMessage = ModelState.Values
+                .SelectMany(x => x.Errors)
+                .First()
+                .ErrorMessage;
+            return new ObjectResult(new {errorMessage = errorMessage})
+            {
+                StatusCode = ErrorStatusCodes.BadRequest.ToStatusCode(),
+            };
+        }
+        
         var username = User.FindFirstValue(ClaimTypes.GivenName);
 
         var user = await _userService.GetUserByNameAsync(username);
@@ -140,6 +188,18 @@ public class TransactionController : ControllerBase
     public async Task<IActionResult> UpdateTransaction(int id,
         [FromBody] UpdateTransactionRequestDto requestDto)
     {
+        if (!ModelState.IsValid)
+        {
+            var errorMessage = ModelState.Values
+                .SelectMany(x => x.Errors)
+                .First()
+                .ErrorMessage;
+            return new ObjectResult(new {errorMessage = errorMessage})
+            {
+                StatusCode = ErrorStatusCodes.BadRequest.ToStatusCode(),
+            };
+        }
+        
         var username = User.FindFirstValue(ClaimTypes.GivenName);
 
         var user = await _userService.GetUserByNameAsync(username);

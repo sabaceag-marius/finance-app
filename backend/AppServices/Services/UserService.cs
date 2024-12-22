@@ -40,7 +40,7 @@ public class UserService : IUserService
             {
                 IsError = true,
                 ErrorStatusCode = ErrorStatusCodes.BadRequest,
-                ErrorMessage = "User creation failed!"
+                ErrorMessage = createdUser.Errors.First().Description
             };
         }
         
@@ -67,7 +67,7 @@ public class UserService : IUserService
     
     public async Task<Response<UserDto>> Login(LoginRequestDto loginDto)
     {
-        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.UserName);
+        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.Username);
 
         if (user == null)
         {

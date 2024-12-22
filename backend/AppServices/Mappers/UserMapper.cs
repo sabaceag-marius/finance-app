@@ -9,7 +9,7 @@ public static class UserMapper
     {
         return new User
         {
-            UserName = registerDto.UserName,
+            UserName = registerDto.Username,
             Email = registerDto.Email
         };
     }

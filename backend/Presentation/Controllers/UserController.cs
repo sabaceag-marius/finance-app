@@ -22,6 +22,17 @@ public class UserController : ControllerBase
 
     public async Task<IActionResult> RegisterUser([FromBody] RegisterRequestDto registerDto)
     {
+        if (!ModelState.IsValid)
+        {
+            var errorMessage = ModelState.Values
+                .SelectMany(x => x.Errors)
+                .First()
+                .ErrorMessage;
+            return new ObjectResult(new {errorMessage = errorMessage})
+            {
+                StatusCode = ErrorStatusCodes.BadRequest.ToStatusCode(),
+            };
+        }
         var response = await _userService.Register(registerDto);
 
         if (response.IsError)
@@ -38,11 +49,24 @@ public class UserController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> LoginUser([FromBody] LoginRequestDto registerDto)
     {
+        
+        if (!ModelState.IsValid)
+        {
+            var errorMessage = ModelState.Values
+                .SelectMany(x => x.Errors)
+                .First()
+                .ErrorMessage;
+            return new ObjectResult(new {errorMessage = errorMessage})
+            {
+                StatusCode = ErrorStatusCodes.BadRequest.ToStatusCode(),
+            };
+        }
+        
         var response = await _userService.Login(registerDto);
         
         if (response.IsError)
         {
-            return new ObjectResult(response.ErrorMessage)
+            return new ObjectResult(new {errorMessage = response.ErrorMessage})
             {
                 StatusCode = response.ErrorStatusCode.ToStatusCode()
             };
