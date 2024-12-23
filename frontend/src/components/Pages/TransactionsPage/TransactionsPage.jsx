@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from "react";
-import './Dashboard.css';
-import CreateTransactionModal from "../CreateTransaction/CreateTransactionModal";
+import './Transactions.css';
+import CreateTransactionModal from "../../CreateTransactionModal/CreateTransactionModal";
 import { apiCall } from "./example";
 import TransactionCard from "../../TransactionCard/TransactionCard";
 import FilterForm from "../../FilterForm/FilterForm";
-function Dashboard(){
+import {useAuth} from "../../../context/AuthContext";
+import {getTransactionsAPI} from "../../../services/TransactionsService";
+function Transactions(){
 
     const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -27,7 +29,7 @@ function Dashboard(){
     function onChangeQuery(event){
 
         const {name,value} = event.target
-        console.log(name, value)
+
         setQueryData(prev => ({
             ...prev,
             [name] : value
@@ -35,33 +37,47 @@ function Dashboard(){
 
     }
 
-    function onSubmit(event){
+    async function onSubmit(event){
         event.preventDefault();
-        console.log(queryData);
+        await fetchData();
     }
 
     function resetFilters(){
         setQueryData(prev => {
-            console.log(prev.searchQuery)
+
             return {
                 categories: "",
                 minValue: "",
                 maxValue: "",
                 searchQuery: prev.searchQuery
             }
-        })
-        console.log(queryData);
+        });
+
+        fetchData().catch(error => console.log(error));
     }
 
-    var transactionComponents = apiCall.data.map( transaction => 
-    <TransactionCard transaction={transaction} />)
+    async function fetchData(){
+
+        setTransactions(await getTransactionsAPI(queryData));
+
+    }
+
+    const [transactions, setTransactions] = useState([]);
+
+    useEffect(() => {
+        fetchData().catch(console.error);
+    }, []);
+
+
+    const  transactionComponents = transactions.map( transaction =>
+        <TransactionCard key={transaction.id} transaction={transaction} />);
 
     return(
-        <div className="dashboard">
+        <div className="transactions-container">
             
             <div className="top-section">
 
-                <h2>Dashboard</h2>
+                <h2>Transactions</h2>
 
                 <div className="top-section-inputs">
                     <div className="search-bar">
@@ -96,17 +112,21 @@ function Dashboard(){
                     <h3>Transactions</h3>
                     
                     <div className="transactions-container">
-                    
-                        {transactionComponents}
+                        {
+                            transactionComponents.length === 0 ?
+                                <h3>There are no transactions</h3>
+                                :
+                            transactionComponents
+                        }
 
                     </div>
                 </div>
             </main>
 
-            <CreateTransactionModal isModalOpen={isModalOpen} closeModal={closeModal} />
+            <CreateTransactionModal isModalOpen={isModalOpen} closeModal={closeModal} onSubmit={fetchData} />
         </div>
     )
 
 }
 
-export default Dashboard;
+export default Transactions;

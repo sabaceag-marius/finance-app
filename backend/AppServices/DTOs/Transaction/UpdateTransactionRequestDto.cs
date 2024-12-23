@@ -5,11 +5,12 @@ namespace AppServices.DTOs.Transaction;
 
 public class UpdateTransactionRequestDto
 {
+    [Required]
     public required string Name { get; set; } = "";
     public string? CategoryName { get; set; } = "";
     public string? Description { get; set; } = "";
     [Required]
-    [Range(1, Double.MaxValue)]
+    [Range(1, 100000)]
     [Column(TypeName = "decimal(18,2)")]
     public decimal Value {get;set;}
     public DateOnly? Date { get; set; }

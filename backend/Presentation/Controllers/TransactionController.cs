@@ -64,9 +64,9 @@ public class TransactionController : ControllerBase
         return Ok(response.Value);
     }
 
-    [HttpGet("id:int")]
+    [HttpGet("{id}")]
     [Authorize]
-    public async Task<IActionResult> GetTransaction(int id)
+    public async Task<IActionResult> GetTransaction([FromRoute] int id)
     {
         if (!ModelState.IsValid)
         {
@@ -142,8 +142,9 @@ public class TransactionController : ControllerBase
     }
 
     [HttpDelete]
+    [Route("{id}")]
     [Authorize]
-    public async Task<IActionResult> DeleteTransaction(int id)
+    public async Task<IActionResult> DeleteTransaction([FromRoute] int id)
     {
         if (!ModelState.IsValid)
         {
@@ -185,7 +186,8 @@ public class TransactionController : ControllerBase
 
     [HttpPut]
     [Authorize]
-    public async Task<IActionResult> UpdateTransaction(int id,
+    [Route("{id}")]
+    public async Task<IActionResult> UpdateTransaction([FromRoute] int id,
         [FromBody] UpdateTransactionRequestDto requestDto)
     {
         if (!ModelState.IsValid)

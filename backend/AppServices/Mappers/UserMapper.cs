@@ -18,8 +18,8 @@ public static class UserMapper
     {
         return new UserDto
         {
-            UserName = user.UserName,
-            Email = user.Email
+            Username = user.UserName,
+            Email = user.Email,
         };
     }
 }

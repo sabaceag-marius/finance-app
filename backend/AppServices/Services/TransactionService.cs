@@ -112,7 +112,7 @@ public class TransactionService : ITransactionService
         }
         else
         {
-            string categoryName = requestDto.CategoryName ?? "misc";
+            string categoryName = (requestDto.CategoryName.IsNullOrEmpty() ? "misc" : requestDto.CategoryName)!;
         
             var category = await _categoryService.GetCategoryByNameAsync(categoryName);
         

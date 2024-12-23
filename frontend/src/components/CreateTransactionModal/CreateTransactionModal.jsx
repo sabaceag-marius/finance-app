@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import Modal from 'react-modal'
 import './CreateTransactionModal.css';
+import {postTransactionAPI} from "../../services/TransactionsService";
 
 
 function CreateTransactionModal(props){
@@ -14,7 +15,7 @@ function CreateTransactionModal(props){
         name : "",
         categoryName: "",
         description: "",
-        value: 0,
+        value: "",
         date: new Date().toISOString().split('T')[0]
     })
     
@@ -28,10 +29,17 @@ function CreateTransactionModal(props){
         
     }
 
-    function handleSubmit(event){
+    async function handleSubmit(event){
         
         event.preventDefault();
-        console.log(formData)
+        console.log(formData);
+
+        const error = await postTransactionAPI(formData);
+
+        if(error) return;
+
+        props.onSubmit();
+        props.closeModal();
     }
 
     function close(event){
@@ -41,7 +49,7 @@ function CreateTransactionModal(props){
             name : "",
             categoryName: "",
             description: "",
-            value: 0,
+            value: "",
             date: new Date().toISOString().split('T')[0]
         }))
 
