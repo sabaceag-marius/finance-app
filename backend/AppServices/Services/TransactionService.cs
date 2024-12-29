@@ -154,7 +154,7 @@ public class TransactionService : ITransactionService
         var specification = query.ToSpecification();
 
         var transactions =
-            await _transactionRepository.GetPaginatedDataWithSpecificationAsync(specification, query.PageNumber,
+            await _transactionRepository.GetFilteredTransactionsAsync(specification, query.PageNumber,
                 query.PageSize, user);
 
         return new Response<IEnumerable<TransactionDto>>
@@ -162,5 +162,10 @@ public class TransactionService : ITransactionService
             Value = transactions.Select(transaction => transaction.ToDto())
         };
 
+    }
+
+    public async Task<Response<int>> GetFilteredTransactionsCountAsync(QueryObject query, User user)
+    {
+        throw new NotImplementedException();
     }
 }

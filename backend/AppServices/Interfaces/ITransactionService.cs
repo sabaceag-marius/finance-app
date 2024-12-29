@@ -17,4 +17,7 @@ public interface ITransactionService
     public Task<Response<IEnumerable<TransactionDto>>> GetAllTransactions();
 
     public Task<Response<IEnumerable<TransactionDto>>> QueryTransactions(QueryObject query, User user);
+
+    public Task<Response<int>> GetFilteredTransactionsCountAsync(QueryObject query, User user);
+
 }

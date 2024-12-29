@@ -66,16 +66,33 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Transaction>> GetPaginatedDataWithSpecificationAsync(
-            Specification<Transaction> specification, int pageNumber, int pageSize, User user)
+        public async Task<IEnumerable<Transaction>> GetFilteredTransactionsAsync(Specification<Transaction> filters,
+            int pageNumber, int pageSize, User user)
         {
             var skipNumber = (pageNumber - 1) * pageSize;
             
             return await _dbContext.Transactions
                 .Include(transaction => transaction.Category)
                 .Where(transaction => transaction.UserId == user.Id)
-                .Where(specification.Expr) // filtering
+                .Where(filters.Expr) // filtering
                 .Skip(skipNumber).Take(pageSize) // pagination
+                .ToListAsync();
+        }
+
+        public async Task<int> GetFilteredTransactionsCountAsync(Specification<Transaction> filters, User user)
+        {
+            return await _dbContext.Transactions
+                .Include(transaction => transaction.Category)
+                .Where(transaction => transaction.UserId == user.Id)
+                .Where(filters.Expr) // filtering
+                .CountAsync();
+        }
+        
+        public async Task<IEnumerable<Transaction>> GetAllUserTransactions(User user)
+        {
+            return await _dbContext.Transactions
+                .Include(transaction => transaction.Category)
+                .Where(transaction => transaction.UserId == user.Id)
                 .ToListAsync();
         }
     }

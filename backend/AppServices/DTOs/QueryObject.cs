@@ -2,7 +2,8 @@
 
 public class QueryObject
 {
-    public List<string>? CategoryNamesList { get; set; }
+    public string? SearchString { get; set; }
+    public string? CategoryName { get; set; }
     public decimal? MinimumValue { get; set; }
     public decimal? MaximumValue { get; set; }
     public int PageNumber { get; set; } = 1;

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Domain.Entities;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Infrastructure.Repositories
 {
@@ -64,5 +65,15 @@ namespace Infrastructure.Repositories
             return await _dbContext.Categories
                 .FirstOrDefaultAsync(category => category.Name == name);
         }
+
+        public async Task<IEnumerable<Category>> GetUserCategories(User user)
+        {
+            return (await _dbContext.Transactions
+                .Include(transaction => transaction.Category)
+                .Where(transaction => transaction.UserId == user.Id)
+                .Select(transaction => transaction.Category)
+                .ToListAsync())!;
+        }
+
     }
 }

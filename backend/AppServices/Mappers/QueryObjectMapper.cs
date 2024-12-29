@@ -2,6 +2,7 @@
 using Domain.Common.Specifications;
 using Domain.Entities;
 using Domain.Specifications;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AppServices.Mappers;
 
@@ -10,13 +11,15 @@ public static class QueryObjectMapper
     public static Specification<Transaction> ToSpecification(this QueryObject queryObject)
     {
         Specification<Transaction> specification = new AnySpecification<Transaction>();
-        
-        if (queryObject.CategoryNamesList != null)
-        {
-            var specifications = queryObject.CategoryNamesList.Select(x => (Specification<Transaction>)
-                new TransactionSpecificationCategory(x)).ToList();
 
-            specification = specification.And(specifications.CombineListOr());
+        if (!queryObject.SearchString.IsNullOrEmpty())
+        {
+            specification = specification.And(new TransactionSpecificationContainsString(queryObject.SearchString!));
+        }
+        
+        if (!queryObject.CategoryName.IsNullOrEmpty())
+        {
+            specification = specification.And(new TransactionSpecificationCategory(queryObject.CategoryName));
         }
         
         if (queryObject.MinimumValue != null)
