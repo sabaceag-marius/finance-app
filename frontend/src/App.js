@@ -1,6 +1,6 @@
 import { Outlet } from "react-router";
 import Navbar from "./components/Navbar/Navbar";
-import Dashboard from "./components/Pages/Dashboard/Dashboard";
+import TransactionsPage from "./components/Pages/TransactionsPage/TransactionsPage";
 import LogInPage from "./components/Pages/LogInPage/LogInPage";
 import SignUpPage from "./components/Pages/SignUpPage/SignUpPage";
 import TransactionCard from "./components/TransactionCard/TransactionCard";

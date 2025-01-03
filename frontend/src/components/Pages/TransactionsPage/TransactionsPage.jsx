@@ -1,92 +1,131 @@
 import React, {useState, useEffect} from "react";
 import './Transactions.css';
 import CreateTransactionModal from "../../CreateTransactionModal/CreateTransactionModal";
-import { apiCall } from "./example";
+import {apiCall} from "./example";
 import TransactionCard from "../../TransactionCard/TransactionCard";
 import FilterForm from "../../FilterForm/FilterForm";
 import {useAuth} from "../../../context/AuthContext";
-import {getTransactionsAPI} from "../../../services/TransactionsService";
-function Transactions(){
+import {getTransactionsAPI, getTransactionsCountAPI} from "../../../services/TransactionsService";
+import PageSelector from "../../PageSelector/PageSelector";
+import {objectEquals} from "../../../utils/ObjectEquality";
+
+function TransactionsPage() {
+
+    // Add transaction modal
 
     const [isModalOpen, setIsModalOpen] = useState(false)
 
-    function openModal(){
+    function openModal() {
         setIsModalOpen(true)
     }
 
-    function closeModal(){
+    function closeModal() {
         setIsModalOpen(false)
     }
 
-
+    // Filter form
     const [queryData, setQueryData] = useState({
-        categories: "",
+        category: "",
         minValue: "",
         maxValue: "",
-        searchQuery: ""
-    })
+        searchString: ""
+    });
 
-    function onChangeQuery(event){
+    const [submittedQueryData, setSubmittedQueryData] = useState(queryData);
 
-        const {name,value} = event.target
+    function onChangeQuery(event) {
+
+        const {name, value} = event.target
 
         setQueryData(prev => ({
             ...prev,
-            [name] : value
+            [name]: value
         }))
 
     }
 
-    async function onSubmit(event){
+    async function onSubmit(event) {
         event.preventDefault();
-        await fetchData();
+
+        console.log(objectEquals(queryData,submittedQueryData));
+        // If the last time we fetched the data we had the same filters
+        // there is no reason to fetch it again
+        if (objectEquals(queryData,submittedQueryData)) return;
+
+
+        await fetchData(queryData);
+        setSubmittedQueryData(queryData);
     }
 
-    function resetFilters(){
-        setQueryData(prev => {
+    function resetFilters() {
 
-            return {
-                categories: "",
-                minValue: "",
-                maxValue: "",
-                searchQuery: prev.searchQuery
-            }
+        setQueryData({
+            category: "",
+            minValue: "",
+            maxValue: "",
+            searchString: ""
         });
 
-        fetchData().catch(error => console.log(error));
+        if(objectEquals(submittedQueryData,{
+            category: "",
+            minValue: "",
+            maxValue: "",
+            searchString: ""
+        })) return;
+
+        console.log("QD: ",queryData);
+        fetchData(queryData).then();
+        setSubmittedQueryData(queryData);
+        console.log("SQD: ",submittedQueryData);
+
     }
 
-    async function fetchData(){
-
-        setTransactions(await getTransactionsAPI(queryData));
-
-    }
+    // Data from backend
 
     const [transactions, setTransactions] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageCount, setPageCount] = useState(0);
+
+    const transactionsPerPage = 2;
+
+    async function fetchData(data) {
+
+        const resultTransactions = await getTransactionsAPI(data);
+
+        if (resultTransactions == null)
+            return;
+
+
+        const resultCount = await getTransactionsCountAPI(data);
+
+        if (resultCount == null)
+            return;
+
+        setTransactions(resultTransactions);
+        setPageCount(Math.ceil(resultCount / transactionsPerPage));
+
+    }
 
     useEffect(() => {
-        fetchData().catch(console.error);
+        fetchData(queryData).catch(console.error);
     }, []);
 
+    const transactionComponents = transactions.map(transaction =>
+        <TransactionCard key={transaction.id} transaction={transaction}/>);
 
-    const  transactionComponents = transactions.map( transaction =>
-        <TransactionCard key={transaction.id} transaction={transaction} />);
-
-    return(
+    return (
         <div className="transactions-container">
-            
-            <div className="top-section">
 
-                <h2>Transactions</h2>
+            <div className="top-section">
 
                 <div className="top-section-inputs">
                     <div className="search-bar">
                         <input type="text"
-                            name="searchQuery"
-                            onChange={onChangeQuery}
-                            value={queryData.searchQuery}
+                               name="searchString"
+                               onChange={onChangeQuery}
+                               value={queryData.searchString}
                         />
-                        <button>
+                        <button onClick={onSubmit}>
                             <span className="material-symbols-outlined">search</span>
                         </button>
                     </div>
@@ -98,35 +137,39 @@ function Transactions(){
             <main>
 
                 <div className="filter-section">
-                    <h3>Filter</h3>
+                    <h2>Filter</h2>
                     <FilterForm
-                        handleChange = {onChangeQuery}
-                        handleSubmit = {onSubmit}
-                        handleReset = {resetFilters}
-                        stateData = {queryData}
+                        handleChange={onChangeQuery}
+                        handleSubmit={onSubmit}
+                        handleReset={resetFilters}
+                        stateData={queryData}
                     />
                 </div>
 
                 <div className="transactions-section">
-                    
-                    <h3>Transactions</h3>
-                    
+
+                    <h2>Transactions</h2>
+
                     <div className="transactions-container">
                         {
                             transactionComponents.length === 0 ?
                                 <h3>There are no transactions</h3>
                                 :
-                            transactionComponents
+                                transactionComponents
                         }
 
                     </div>
+
+                    <PageSelector pageCount={pageCount}/>
+
                 </div>
             </main>
-
-            <CreateTransactionModal isModalOpen={isModalOpen} closeModal={closeModal} onSubmit={fetchData} />
+            <CreateTransactionModal isModalOpen={isModalOpen} closeModal={closeModal} onSubmit={() => {
+                fetchData(queryData).then()
+            }}/>
         </div>
     )
 
 }
 
-export default Transactions;
+export default TransactionsPage;

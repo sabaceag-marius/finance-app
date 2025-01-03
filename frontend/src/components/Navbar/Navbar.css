@@ -15,7 +15,10 @@ nav{
 }
 
 .buttons--section a {
-
     font-size: 1.25rem;
+    text-decoration: none;
+}
+
+.logo{
     text-decoration: none;
 }

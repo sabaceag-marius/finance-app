@@ -21,14 +21,11 @@ export default function LogInPage(){
         }))
     }
 
-    async function handleSubmit(event){
+    function handleSubmit(event){
         event.preventDefault()
-        
-        // console.log(formData)
 
         loginUser(formData.username,formData.password);
-        // console.log(response)
-        
+
     }
 
     // Password visibility toggle

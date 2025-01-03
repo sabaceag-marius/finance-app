@@ -9,19 +9,15 @@ export default function Navbar(){
     return(
         <nav>
 
-            <div className='logo'>
+            <Link to="/" className='logo'>
                 <h1>Pocket Planner</h1>
-            </div>
+            </Link>
 
             {isLoggedIn() ?
 
                 <div className='buttons--section'>
-                    <Link to="/dashboard">Dashboard</Link>
+                    <Link to="/transactions">Transactions</Link>
                     <a href='#' onClick={logoutUser}>Log out</a>
-                    {/* <Link to="/login">Log in</Link>
-                    <Link to="/register">Register</Link> */}
-                    {/* <a href='#'>User</a>
-                    <a href='#'>Log out</a> */}
                 </div>
                 :
                 <div className='buttons--section'>

@@ -22,7 +22,6 @@ body {
   font-family: Poppins, sans-serif;
   color: var(--primary-content);
   background-color: var(--background);
-  /* height: 100%; */
 }
 
 /*hide arrows on number inputs*/
@@ -67,10 +66,10 @@ h3{
 
 .password-input-container{
   background: #f7f7f7;
-	padding: .75rem 2rem;
-	border: 1px solid #ccc;
-	outline: none;
-	border-radius: 5px;
+  padding: .75rem 2rem;
+  border: 1px solid #ccc;
+  outline: none;
+  border-radius: 5px;
   font-family: Poppins;
   font-size: 1.1rem;
   display: flex;
@@ -87,4 +86,38 @@ h3{
 
 .password-input-container span{
   cursor:pointer;
+}
+
+.primary-button{
+  /*align-self: center;*/
+  color: var(--secondary-content);
+  background: var(--primary);
+  font-size: 1rem;
+  font-weight: bold;
+  outline: none;
+  border: none;
+  border-radius: 1rem;
+  transition: .2s ease-in;
+  cursor: pointer;
+}
+
+.primary-button:hover{
+  background: var(--primary-light);
+}
+
+.secondary-button{
+  color: var(--secondary-content);
+  background: var(--secondary);
+  font-size: 1rem;
+  font-weight: bold;
+  outline: none;
+  border: none;
+  border-radius: 1rem;
+  transition: .2s ease-in;
+  cursor: pointer;
+}
+
+.secondary-button:hover{
+  background: var(--secondary-light);
+
 }

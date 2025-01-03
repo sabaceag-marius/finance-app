@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import Modal from 'react-modal'
 import './CreateTransactionModal.css';
-import {postTransactionAPI} from "../../services/TransactionsService";
+import {addTransactionAPI} from "../../services/TransactionsService";
 
 
 function CreateTransactionModal(props){
@@ -34,7 +34,7 @@ function CreateTransactionModal(props){
         event.preventDefault();
         console.log(formData);
 
-        const error = await postTransactionAPI(formData);
+        const error = await addTransactionAPI(formData);
 
         if(error) return;
 
