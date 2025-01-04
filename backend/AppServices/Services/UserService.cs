@@ -33,7 +33,7 @@ public class UserService : IUserService
         var user = registerDto.ToUser();
 
         var createdUser = await _userManager.CreateAsync(user, registerDto.Password);
-
+        
         if (!createdUser.Succeeded)
         {
             return new Response<UserDto>
@@ -129,5 +129,23 @@ public class UserService : IUserService
         var user = await _userManager.FindByNameAsync(username);
 
         return user;
+    }
+
+    public async Task<Response> DeleteUser(User user)
+    {
+        
+        var result= await _userManager.DeleteAsync(user);
+        
+        if (!result.Succeeded)
+        {
+            return new Response
+            {
+                IsError = true,
+                ErrorStatusCode = ErrorStatusCodes.BadRequest,
+                ErrorMessage = result.Errors.First().Description
+            };
+        }
+        
+        return new Response();
     }
 }

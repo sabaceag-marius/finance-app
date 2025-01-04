@@ -20,4 +20,6 @@ public interface ITransactionService
 
     public Task<Response<int>> GetFilteredTransactionsCountAsync(QueryObject query, User user);
 
+    public Task<Response> DeleteUserTransactions(User user);
+
 }

@@ -13,4 +13,5 @@ public interface ITransactionRepository : IRepository<Transaction, int>
 
     public Task<int> GetFilteredTransactionsCountAsync(Specification<Transaction> filters, User user);
 
+    public Task DeleteUserTransactionsAsync(User user);
 }

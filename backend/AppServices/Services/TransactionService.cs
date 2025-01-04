@@ -142,7 +142,7 @@ public class TransactionService : ITransactionService
             };
         }
         
-        await _transactionRepository.DeleteAsync(id);
+        await _transactionRepository.DeleteAsync(transaction);
 
         return new Response();
     }
@@ -166,6 +166,20 @@ public class TransactionService : ITransactionService
 
     public async Task<Response<int>> GetFilteredTransactionsCountAsync(QueryObject query, User user)
     {
-        throw new NotImplementedException();
+        var specification = query.ToSpecification();
+
+        var count = await _transactionRepository.GetFilteredTransactionsCountAsync(specification, user);
+
+        return new Response<int>()
+        {
+            Value = count
+        };
+    }
+
+    public async Task<Response> DeleteUserTransactions(User user)
+    {
+        await _transactionRepository.DeleteUserTransactionsAsync(user);
+
+        return new Response();
     }
 }

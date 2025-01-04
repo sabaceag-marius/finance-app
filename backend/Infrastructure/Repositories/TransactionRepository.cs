@@ -26,14 +26,9 @@ namespace Infrastructure.Repositories
             return transaction;
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(Transaction t)
         {
-            var transaction = await _dbContext.Transactions.FindAsync(id);
-
-            if (transaction == null) return;
-
-            _dbContext.Transactions.Remove(transaction);
-
+            _dbContext.Transactions.Remove(t);
             await _dbContext.SaveChangesAsync();
         }
 
@@ -75,6 +70,7 @@ namespace Infrastructure.Repositories
                 .Include(transaction => transaction.Category)
                 .Where(transaction => transaction.UserId == user.Id)
                 .Where(filters.Expr) // filtering
+                .OrderByDescending(transaction => transaction.Date)
                 .Skip(skipNumber).Take(pageSize) // pagination
                 .ToListAsync();
         }
@@ -87,7 +83,21 @@ namespace Infrastructure.Repositories
                 .Where(filters.Expr) // filtering
                 .CountAsync();
         }
-        
+
+        public async Task DeleteUserTransactionsAsync(User user)
+        {
+
+            var transactions = await _dbContext.Transactions
+                .Where(t => t.UserId == user.Id)
+                .ToListAsync();
+            
+            if(transactions.Count == 0) return;
+
+            _dbContext.Transactions.RemoveRange(transactions);
+            await _dbContext.SaveChangesAsync();
+
+        }
+
         public async Task<IEnumerable<Transaction>> GetAllUserTransactions(User user)
         {
             return await _dbContext.Transactions
