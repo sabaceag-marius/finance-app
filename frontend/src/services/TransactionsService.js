@@ -3,9 +3,11 @@ import axios from "axios";
 
 const api = 'https://localhost:7284/api';
 
-export async function getTransactionsAPI(queryData){
+export async function getTransactionsAPI(queryData, pageNumber, pageSize){
 
     const queryParams = getQueryParams(queryData);
+    queryParams.pageNumber = pageNumber;
+    queryParams.pageSize = pageSize;
 
     try{
         const response = await axios.get(api+"/transactions",{params: queryParams});
@@ -19,28 +21,34 @@ export async function getTransactionsAPI(queryData){
 
 export async function getTransactionAPI(id){
 
-    const response = await axios.get(`${api}/transactions/${id}`);
-    return response.data;
-}
-
-export async function addTransactionAPI(transaction){
     try{
-        await axios.post(api+"/transactions",{
-            ...transaction,
-            value : parseFloat(transaction.value)
-        });
-
-        return false;
+        const response = await axios.get(`${api}/transactions/${id}`);
+        return response.data;
     }
     catch (error){
         handleError(error);
-        return true;
+    }
+}
+
+export async function addTransactionAPI(transaction){
+
+    try{
+        const response = await axios.post(api + "/transactions", {
+            ...transaction,
+            value: transaction.value === "" ? undefined : parseFloat(transaction.value)
+        });
+
+        return response.data;
+    }
+    catch (error){
+        handleError(error);
     }
 }
 
 export async function deleteTransactionAPI(id){
     try{
-        await axios.delete(`${api}/transactions/${id}`);
+        const response = await axios.delete(`${api}/transactions/${id}`);
+        return response.data;
     }
     catch (error){
         handleError(error);
@@ -49,14 +57,16 @@ export async function deleteTransactionAPI(id){
 
 export async function updateTransactionAPI(id,transaction){
     try{
-        await axios.put(`${api}/transactions/${id}`,transaction);
-        return false;
+        const response = await axios.put(`${api}/transactions/${id}`,{
+            ...transaction,
+            value: transaction.value === "" ? undefined : parseFloat(transaction.value)
+        });
+
+        return response.data;
 
     }
     catch (error){
         handleError(error);
-
-        return true;
     }
 }
 

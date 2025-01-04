@@ -33,7 +33,7 @@
     margin: .5rem 0;
 }
 
-form{
+.login--form{
     display: flex;
     flex-direction: column;
     gap: .5rem;

@@ -4,20 +4,17 @@ import './CreateTransactionModal.css';
 import {addTransactionAPI} from "../../services/TransactionsService";
 
 
-function CreateTransactionModal(props){
+function CreateTransactionModal({isModalOpen,closeModal,handleSubmit}){
 
-    const [validationError, setValidationError] = useState({
-        exists: false,
-        message: "Incorrect username/password"
-    })
-
-    const [formData,setFormData] = useState({
+    const DEFAULT_FORM_DATA = {
         name : "",
         categoryName: "",
         description: "",
         value: "",
         date: new Date().toISOString().split('T')[0]
-    })
+    };
+
+    const [formData,setFormData] = useState(DEFAULT_FORM_DATA);
     
     function handleFormChange(event){
         const {name,value} = event.target
@@ -29,37 +26,35 @@ function CreateTransactionModal(props){
         
     }
 
-    async function handleSubmit(event){
+    async function onSubmit(event){
         
         event.preventDefault();
-        console.log(formData);
 
-        const error = await addTransactionAPI(formData);
+        const result = await addTransactionAPI(formData);
 
-        if(error) return;
+        setFormData(DEFAULT_FORM_DATA);
 
-        props.onSubmit();
-        props.closeModal();
+        if(result === undefined){
+            return;
+        }
+
+        handleSubmit();
+        closeModal();
+
     }
 
-    function close(event){
+    function onClose(){
         
         //Reset form data
-        setFormData(({
-            name : "",
-            categoryName: "",
-            description: "",
-            value: "",
-            date: new Date().toISOString().split('T')[0]
-        }))
+        setFormData(DEFAULT_FORM_DATA);
 
-        props.closeModal();
+        closeModal();
     }
 
-    var styling = {
-        overlay:{
-            // background: "transparent"
-        },
+    const styling = {
+        // overlay:{
+        //     background: "transparent"
+        // },
         content:{
 
             display: "flex",
@@ -74,8 +69,8 @@ function CreateTransactionModal(props){
     return(
 
         <Modal
-            isOpen={props.isModalOpen}
-            onRequestClose={close}
+            isOpen={isModalOpen}
+            onRequestClose={onClose}
             preventScroll={false}
             style={styling}
         >
@@ -84,14 +79,13 @@ function CreateTransactionModal(props){
             <div className="form-header">
                 <h2 className="form-header-title">Add transaction</h2>
                 <button 
-                    className="form-header-button"
-                    onClick={close}>
-                    <span className="material-symbols-outlined">close</span>
+                    className="form-header-button material-symbols-outlined"
+                    onClick={onClose}>close
                 </button>
             </div>
 
-            <form className="transaction-modal" onSubmit={handleSubmit}>
-                <label htmlFor="name">Title</label>
+            <form className="transaction-modal" onSubmit={onSubmit}>
+                <label htmlFor="name">Name</label>
                 <input 
                     className="modal--input"
                     type="text"
@@ -123,7 +117,7 @@ function CreateTransactionModal(props){
                     value={formData.description}
                 />
 
-                <label htmlFor="value">Value</label>
+                <label htmlFor="value">Amount</label>
                 <input 
                     className="modal--input"
                     type="number"
@@ -144,8 +138,6 @@ function CreateTransactionModal(props){
                     value={formData.date} />
                 <button className="submit-button">Submit</button>
             </form>
-
-            <p className="error">{validationError.exists ? validationError.message : ' '}</p>
        
             </div>
         </Modal>

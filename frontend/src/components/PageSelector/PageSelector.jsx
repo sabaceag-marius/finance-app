@@ -1,21 +1,13 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import "./PageSelector.css";
 
 
-function PageSelector({pageCount}) {
+//TODO this component is rendered too many times! - due to strict mode?
 
-
-    const [currentPage,setCurrentPage] = useState(1);
-    // const nrPages = 20;
-
-    const maxNrButtons = 5;
-
-    let buttonIndexes = getIndexes();
-
+function PageSelector({currentPage,pageCount,setCurrentPage}) {
 
 
     function getIndexes(){
-
         if(!pageCount) return [];
 
         let list = [];
@@ -40,6 +32,14 @@ function PageSelector({pageCount}) {
         return list;
     }
 
+    const maxNrButtons = 3;
+    const buttonIndexes = getIndexes();
+
+    // const [buttonIndexes,setButtonIndexes] = useState([]);
+    //
+    // useEffect(() => {
+    //     setButtonIndexes(getIndexes());
+    // }, [pageCount]);
 
     const selectedStyle = {
         backgroundColor : 'red'
@@ -47,22 +47,30 @@ function PageSelector({pageCount}) {
 
     const buttonComponents =
         buttonIndexes.map(idx =>
-            <button key={idx}
-                    style={idx === currentPage ? selectedStyle : {}}
-                    onClick={()=>onButtonPress(idx)}>{idx}
+            <button key={idx} name={idx} style={idx === currentPage ? selectedStyle : {}}
+                    onClick={onButtonPress}>{idx}
             </button>)
 
-    function onButtonPress(idx){
-        if(currentPage === idx) return;
-        setCurrentPage(idx);
-        //
+    function onButtonPress(e){
+        const {name} = e.target;
+        let newPage;
+
+        if(name === "first-page") newPage = 1;
+        else if(name === "last-page") {
+            newPage = pageCount;
+        }
+        else newPage = parseInt(name);
+
+        if(newPage === currentPage) return;
+
+        setCurrentPage(newPage);
     }
 
     return (
         <div className="page--selector--container">
-            <button onClick={()=>onButtonPress(1)}><span className="material-symbols-outlined">keyboard_double_arrow_left</span></button>
+            <button name="first-page" onClick={onButtonPress} className="material-symbols-outlined">keyboard_double_arrow_left</button>
             {buttonComponents}
-            <button onClick={()=>onButtonPress(pageCount)}><span className="material-symbols-outlined">keyboard_double_arrow_right</span></button>
+            <button name="last-page" onClick={onButtonPress} className="material-symbols-outlined">keyboard_double_arrow_right</button>
         </div>
     );
 }

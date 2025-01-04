@@ -2,12 +2,12 @@ import React, {useState} from 'react';
 import Modal from "react-modal";
 import {addTransactionAPI, updateTransactionAPI} from "../../services/TransactionsService";
 
-function EditTransactionModal({isModalOpen,handleClosing,handleSubmit,transaction}) {
+function EditTransactionModal({isModalOpen,closeModal,handleSubmit,transaction}) {
 
     const styling = {
-        overlay:{
-            // background: "transparent"
-        },
+        // overlay:{
+        //     // background: "transparent"
+        // },
         content:{
 
             display: "flex",
@@ -37,7 +37,7 @@ function EditTransactionModal({isModalOpen,handleClosing,handleSubmit,transactio
         }))
     }
 
-    function closeModal(){
+    function onClosing(){
         setFormData({
             name : transaction.name,
             categoryName: transaction.categoryName,
@@ -45,26 +45,28 @@ function EditTransactionModal({isModalOpen,handleClosing,handleSubmit,transactio
             value: transaction.value,
             date: transaction.date
         });
-        handleClosing();
+        closeModal();
     }
 
     async function onSubmit(event){
 
         event.preventDefault();
 
-        const error = await updateTransactionAPI(transaction.id,formData);
+        const result = await addTransactionAPI(formData);
 
-        if(error) return;
+        if(result === undefined){
+            return;
+        }
 
         handleSubmit();
-        closeModal();
+        onClosing();
     }
 
     return (
         <Modal
             style={styling}
             isOpen={isModalOpen}
-            onRequestClose={closeModal}
+            onRequestClose={onClosing}
             preventScroll={false}
         >
             <div className="form--card">
@@ -73,7 +75,7 @@ function EditTransactionModal({isModalOpen,handleClosing,handleSubmit,transactio
                     <h2 className="form-header-title">Add transaction</h2>
                     <button
                         className="form-header-button"
-                        onClick={closeModal}>
+                        onClick={onClosing}>
                         <span className="material-symbols-outlined">close</span>
                     </button>
                 </div>

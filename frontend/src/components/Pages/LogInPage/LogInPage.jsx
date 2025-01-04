@@ -42,7 +42,7 @@ export default function LogInPage(){
             <div className="login--card">
             <h1>Log in</h1>
             
-            <form onSubmit={handleSubmit}>
+            <form className="login--form" onSubmit={handleSubmit}>
                 <label className="login-label" htmlFor="username">Username</label>
                 <input 
                     className="login-input"

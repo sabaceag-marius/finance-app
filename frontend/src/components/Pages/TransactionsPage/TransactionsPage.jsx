@@ -11,7 +11,7 @@ import {objectEquals} from "../../../utils/ObjectEquality";
 
 function TransactionsPage() {
 
-    // Add transaction modal
+    // region Add Transaction Modal
 
     const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -23,15 +23,19 @@ function TransactionsPage() {
         setIsModalOpen(false)
     }
 
-    // Filter form
-    const [queryData, setQueryData] = useState({
+    // endregion
+
+    // region Filter forms
+
+    const EMPTY_QUERY_DATA = {
         category: "",
         minValue: "",
         maxValue: "",
         searchString: ""
-    });
+    };
+    const [queryData, setQueryData] = useState(EMPTY_QUERY_DATA);
 
-    const [submittedQueryData, setSubmittedQueryData] = useState(queryData);
+    const [submittedQueryData, setSubmittedQueryData] = useState(EMPTY_QUERY_DATA);
 
     function onChangeQuery(event) {
 
@@ -44,71 +48,92 @@ function TransactionsPage() {
 
     }
 
-    async function onSubmit(event) {
-        event.preventDefault();
+    // Function that it is called when we submit the filter or search form
+    function onSubmit(e){
+        e.preventDefault();
 
-        console.log(objectEquals(queryData,submittedQueryData));
-        // If the last time we fetched the data we had the same filters
-        // there is no reason to fetch it again
-        if (objectEquals(queryData,submittedQueryData)) return;
+        // Don't submit if the last query had the same filters
+        // to prevent fetching the same data
+        if(objectEquals(queryData,submittedQueryData)) return;
 
-
-        await fetchData(queryData);
+        // Change the last submitted query data => the effect hook will fetch the new data
         setSubmittedQueryData(queryData);
     }
 
-    function resetFilters() {
+    function resetFilters(){
 
-        setQueryData({
-            category: "",
-            minValue: "",
-            maxValue: "",
-            searchString: ""
-        });
+        // Note: we use the emptyQueryData for setting and comparing with the last query
+        // because the set functions for the state hooks run asynchronously
 
-        if(objectEquals(submittedQueryData,{
-            category: "",
-            minValue: "",
-            maxValue: "",
-            searchString: ""
-        })) return;
+        // Reset the data from the forms
+        setQueryData(EMPTY_QUERY_DATA);
 
-        console.log("QD: ",queryData);
-        fetchData(queryData).then();
-        setSubmittedQueryData(queryData);
-        console.log("SQD: ",submittedQueryData);
+        // Don't submit if the last query didn't have any filters
+        if(objectEquals(submittedQueryData, EMPTY_QUERY_DATA)) return;
 
+        // Change the last submitted query data => the effect hook will fetch the new data
+        setSubmittedQueryData(EMPTY_QUERY_DATA);
     }
 
-    // Data from backend
+    //endregion
 
-    const [transactions, setTransactions] = useState([]);
+
+    // region Paging
+
     const [currentPage, setCurrentPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
+    const PAGE_SIZE = 2;
 
-    const transactionsPerPage = 2;
+    //endregion
 
-    async function fetchData(data) {
-
-        const resultTransactions = await getTransactionsAPI(data);
-
-        if (resultTransactions == null)
-            return;
+    // region Fetching Data (useEffect)
 
 
-        const resultCount = await getTransactionsCountAPI(data);
 
-        if (resultCount == null)
-            return;
-
-        setTransactions(resultTransactions);
-        setPageCount(Math.ceil(resultCount / transactionsPerPage));
-
-    }
+    // When we change the current page - fetch the transactions for that page
 
     useEffect(() => {
-        fetchData(queryData).catch(console.error);
-    }, []);
+        getTransactionsAPI(submittedQueryData,currentPage, PAGE_SIZE).then(result => {
+
+            if(result === undefined) return;
+
+            setTransactions(result);
+        });
+
+    }, [currentPage]);
+
+    // When we submit a query with different filters - fetch the pageCount and the transactions for the first page
+    useEffect(() => {
+        console.log("Fetch page count and transactions for 1st page");
+        getTransactionsCountAPI(submittedQueryData).then(result =>{
+
+            if(result === undefined) return;
+
+            setPageCount(Math.ceil(result / PAGE_SIZE));
+        });
+
+        // When we change the current page we fetch the transactions for that page
+        // so we check before what is the current page to prevent fetching the data twice
+
+        if(currentPage !== 1) {
+            setCurrentPage(1);
+        }
+        else {
+            getTransactionsAPI(submittedQueryData, currentPage, PAGE_SIZE).then(result => {
+
+                if(result === undefined) return;
+
+                setTransactions(result);
+            });
+        }
+
+    }, [submittedQueryData]);
+
+
+    // endregion
+
+
+    const [transactions, setTransactions] = useState([]);
 
     const transactionComponents = transactions.map(transaction =>
         <TransactionCard key={transaction.id} transaction={transaction}/>);
@@ -119,7 +144,7 @@ function TransactionsPage() {
             <div className="top-section">
 
                 <div className="top-section-inputs">
-                    <div className="search-bar">
+                    <form className="search-bar" onSubmit={onSubmit}>
                         <input type="text"
                                name="searchString"
                                onChange={onChangeQuery}
@@ -128,7 +153,7 @@ function TransactionsPage() {
                         <button onClick={onSubmit}>
                             <span className="material-symbols-outlined">search</span>
                         </button>
-                    </div>
+                    </form>
 
                     <button onClick={openModal}>+ Add</button>
                 </div>
@@ -160,12 +185,12 @@ function TransactionsPage() {
 
                     </div>
 
-                    <PageSelector pageCount={pageCount}/>
+                    <PageSelector pageCount={pageCount} currentPage={currentPage} setCurrentPage={setCurrentPage}/>
 
                 </div>
             </main>
-            <CreateTransactionModal isModalOpen={isModalOpen} closeModal={closeModal} onSubmit={() => {
-                fetchData(queryData).then()
+            <CreateTransactionModal isModalOpen={isModalOpen} closeModal={closeModal} handleSubmit={() => {
+                setSubmittedQueryData(EMPTY_QUERY_DATA);
             }}/>
         </div>
     )

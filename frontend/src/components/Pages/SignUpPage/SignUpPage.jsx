@@ -42,7 +42,7 @@ export default function SignUpPage(){
         <div className="signup--card">
             <h1>Register</h1>
 
-            <form onSubmit={handleSubmit}>
+            <form className="signup--form" onSubmit={handleSubmit}>
 
                 <label className="login-label" htmlFor="email">Email</label>
                 <input 

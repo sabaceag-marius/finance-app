@@ -16,7 +16,14 @@ function TransactionDetailsPage() {
 
     useEffect(() => {
 
-        getTransactionAPI(id).then(transaction => setTransaction(transaction));
+        getTransactionAPI(id).then(result => {
+
+            if(result === undefined){
+                return;
+            }
+
+            setTransaction(result);
+        });
     }, []);
 
 
@@ -36,7 +43,11 @@ function TransactionDetailsPage() {
     }
 
     async function submitDeleteModal(){
-        await deleteTransactionAPI(id);
+        const result = await deleteTransactionAPI(id);
+
+        if(result === undefined){
+            return;
+        }
 
         navigate("/transactions");
     }
@@ -87,7 +98,7 @@ function TransactionDetailsPage() {
 
                 <EditTransactionModal
                     isModalOpen={isUpdateModalOpen}
-                    handleClosing={closeUpdateModal}
+                    closeModal={closeUpdateModal}
                     handleSubmit={submitUpdateModal}
                     transaction={transaction}
                 />
