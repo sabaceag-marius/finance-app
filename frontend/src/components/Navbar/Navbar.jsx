@@ -17,6 +17,7 @@ export default function Navbar(){
 
                 <div className='buttons--section'>
                     <Link to="/transactions">Transactions</Link>
+                    <Link to="/user">User</Link>
                     <a href='#' onClick={logoutUser}>Log out</a>
                 </div>
                 :

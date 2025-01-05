@@ -88,6 +88,8 @@ function getQueryParams(queryData){
         CategoryName: queryData.category,
         MinimumValue: queryData.minValue.length === 0 ? null : parseFloat(queryData.minValue),
         MaximumValue: queryData.maxValue.length === 0 ? null : parseFloat(queryData.maxValue),
-        SearchString: queryData.searchString.length === 0 ? null : queryData.searchString
+        SearchString: queryData.searchString.length === 0 ? null : queryData.searchString,
+        beforeDate: queryData.beforeDate.length === 0 ? null : queryData.beforeDate,
+        afterDate: queryData.afterDate.length === 0 ? null : queryData.afterDate,
     };
 }

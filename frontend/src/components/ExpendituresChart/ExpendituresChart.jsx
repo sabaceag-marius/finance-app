@@ -7,11 +7,8 @@ import moment from "moment/moment";
 
 function ExpendituresChart() {
 
-
-
     const [labels,setLabels] = useState([]);
     const [values,setValues] = useState([]);
-
 
     const [timeInput,setTimeInput] = useState({
         type : 'month',
@@ -42,7 +39,7 @@ function ExpendituresChart() {
     useEffect(() => {
         getSpendingsAPI()
             .then(res =>{
-                if(res != null){
+                if(res !== undefined){
                     setLabels(res.map(element => element.categoryName));
                     setValues(res.map(element => element.amount));
                 }
@@ -83,7 +80,7 @@ function ExpendituresChart() {
 
     function changeTimeInputValue(amount){
 
-        const {type,currentMoment,startDate,endDate} = timeInput;
+        const {type,currentMoment} = timeInput;
         currentMoment.add(amount,type);
 
         setTimeInput(prev =>({

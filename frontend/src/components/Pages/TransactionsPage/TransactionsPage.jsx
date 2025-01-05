@@ -31,7 +31,9 @@ function TransactionsPage() {
         category: "",
         minValue: "",
         maxValue: "",
-        searchString: ""
+        searchString: "",
+        beforeDate: "",
+        afterDate: ""
     };
     const [queryData, setQueryData] = useState(EMPTY_QUERY_DATA);
 
@@ -40,7 +42,7 @@ function TransactionsPage() {
     function onChangeQuery(event) {
 
         const {name, value} = event.target
-
+        console.log(queryData);
         setQueryData(prev => ({
             ...prev,
             [name]: value

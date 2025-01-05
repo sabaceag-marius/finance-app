@@ -35,6 +35,18 @@ export async function registerAPI(email,username, password) {
 
     }
     catch(error){
+        console.log(error);
+        handleError(error);
+    }
+}
+
+export async function deleteUserAPI(){
+    try{
+        const response = await axios.delete(api+"/accounts/delete");
+        console.log(":3");
+        return response.data;
+    }
+    catch (error){
         handleError(error);
     }
 }

@@ -17,7 +17,8 @@ function CreateTransactionModal({isModalOpen,closeModal,handleSubmit}){
     const [formData,setFormData] = useState(DEFAULT_FORM_DATA);
     
     function handleFormChange(event){
-        const {name,value} = event.target
+        const {name,value} = event.target;
+
 
         setFormData(prev =>({
             ...prev,

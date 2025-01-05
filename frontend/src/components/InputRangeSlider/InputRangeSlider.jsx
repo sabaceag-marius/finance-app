@@ -10,14 +10,14 @@ function InputRangeSlider({min,max,step=1}) {
 
         const {value} = e.target;
 
-        setMinValue(Math.min(value,maxValue-step));
+        setMinValue(Math.min(value,maxValue));
     }
 
     function handleMaxChange(e){
 
         const {value} = e.target;
 
-        setMaxValue(Math.max(value,minValue + step));
+        setMaxValue(Math.max(value,minValue));
     }
 
     return (

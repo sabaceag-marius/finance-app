@@ -1,7 +1,7 @@
 import React, {createContext, useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 import axios from "axios";
-import {loginAPI, registerAPI} from "../services/AuthService";
+import {deleteUserAPI, loginAPI, registerAPI} from "../services/AuthService";
 import {toast} from "react-toastify";
 import handleError from "../services/ErrorService";
 
@@ -98,8 +98,29 @@ export const UserProvider = ({children}) => {
         navigate("/");
     };
 
+    const deleteUser = async () => {
+
+        const result = await deleteUserAPI();
+
+        console.log(result);
+
+        if(result === undefined){
+            return;
+        }
+
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        setUser(null);
+        setToken(null);
+        axios.defaults.headers.common["Authorization"] = "";
+        setLoggedStatus(false);
+        toast.success("Account deleted successfully!");
+
+        navigate("/");
+    };
+
     return (
-        <UserContext.Provider value={{loginUser, registerUser, logoutUser, user, token, isLoggedIn}}>
+        <UserContext.Provider value={{loginUser, registerUser, logoutUser, deleteUser, user, token, isLoggedIn}}>
             {isReady ? children : null}
         </UserContext.Provider>
     )

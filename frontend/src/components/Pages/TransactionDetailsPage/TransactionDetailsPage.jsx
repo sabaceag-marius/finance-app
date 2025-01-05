@@ -16,14 +16,20 @@ function TransactionDetailsPage() {
 
     useEffect(() => {
 
+        let r;
         getTransactionAPI(id).then(result => {
 
+            r = result;
             if(result === undefined){
                 return;
             }
 
             setTransaction(result);
         });
+
+        if(r === undefined) {
+            throw  new Error();
+        }
     }, []);
 
 

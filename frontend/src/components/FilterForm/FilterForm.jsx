@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import './FilterForm.css'
 import {getCategoriesAPI} from "../../services/CategoriesService";
 import InputRangeSlider from "../InputRangeSlider/InputRangeSlider";
-function FilterForm(props){
+function FilterForm({handleSubmit,handleChange,stateData,handleReset}){
 
     const [categories,setCategories] = useState([]);
 
@@ -21,14 +21,14 @@ function FilterForm(props){
 
     return(
 
-        <form onSubmit={props.handleSubmit} className="filter-form">
+        <form onSubmit={handleSubmit} className="filter-form">
             <label className="filter-label" htmlFor="category">Categories</label>
 
             <select
                 id="category"
                 name="category"
-                onChange={props.handleChange}
-                value={props.stateData.category}
+                onChange={handleChange}
+                value={stateData.category}
                 className="select"
             >
                 <option value="">Select a category</option>
@@ -42,8 +42,8 @@ function FilterForm(props){
                 step="0.01"
                 id="minValue"
                 name="minValue"
-                onChange={props.handleChange}
-                value={props.stateData.minValue}
+                onChange={handleChange}
+                value={stateData.minValue}
             />
 
             <label className="filter-label" htmlFor="maxValue">Maximum value</label>
@@ -53,16 +53,33 @@ function FilterForm(props){
                 step="0.01"
                 id="maxValue"
                 name="maxValue"
-                onChange={props.handleChange}
-                value={props.stateData.maxValue}
+                onChange={handleChange}
+                value={stateData.maxValue}
             />
 
-            {/*<InputRangeSlider min={1} max={100} step={10} />*/}
+            <label className="filter-label" htmlFor="afterDate">After date</label>
+            <input
+                className="filter-input"
+                type="date"
+                id="afterDate"
+                name="afterDate"
+                onChange={handleChange}
+                value={stateData.afterDate}
+            />
 
+            <label className="filter-label" htmlFor="beforeDate">Before Date</label>
+            <input
+                className="filter-input"
+                type="date"
+                id="beforeDate"
+                name="beforeDate"
+                onChange={handleChange}
+                value={stateData.beforeDate}
+            />
 
             <section className="buttons-section">
                 <button type="submit" className="submit-button">Filter</button>
-                <button type="button" onClick={props.handleReset} className="reset-button">Reset</button>
+                <button type="button" onClick={handleReset} className="reset-button">Reset</button>
             </section>
         </form>
 

@@ -8,7 +8,9 @@ export default function handleError(error){
     }
 
     
-    const errorData = error.response?.data.errorMessage;
+    let errorData = error.response?.data.errorMessage;
+
+    if(!errorData) errorData = error.response?.data;
 
     notifyError(errorData);
     
