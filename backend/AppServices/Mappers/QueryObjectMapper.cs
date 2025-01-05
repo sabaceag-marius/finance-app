@@ -32,6 +32,16 @@ public static class QueryObjectMapper
             specification = specification.And(new TransactionSpecificationMaximumValue((decimal)queryObject.MaximumValue));
         }
 
+        if (queryObject.BeforeDate != null)
+        {
+            specification = specification.And(new TransactionSpecificationBeforeDate((DateOnly)queryObject.BeforeDate));
+        }
+        
+        if (queryObject.AfterDate != null)
+        {
+            specification = specification.And(new TransactionSpecificationAfterDate((DateOnly)queryObject.AfterDate));
+        }
+
         return specification;
     } 
 }
